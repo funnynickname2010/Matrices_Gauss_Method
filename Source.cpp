@@ -1,8 +1,6 @@
 #include <iostream>
 #include <cmath>
 
-//Minus zeros have to go
-
 #define FTYPE double
 
 using namespace std;
@@ -15,6 +13,8 @@ void row_substraction_row2_row1(FTYPE*& row1, FTYPE*& row2, int col);
 void row_multiplication_true(FTYPE*& row, FTYPE scalar, int row_length);
 FTYPE* row_multiplication_return(FTYPE* row, FTYPE scalar, int row_length);
 void row_row1_plus_row2mult_by_scalar(FTYPE*& row1, FTYPE* row2, FTYPE scalar, int row_length);
+void no_minus_zeros(FTYPE** m, int row, int col);
+void matrix_solution_output(FTYPE** m, int row, int col);
 
 int main()
 {
@@ -54,25 +54,27 @@ int main()
 
 	//printing matrix 
 
+	no_minus_zeros(m, row, col);
 	matrix_print(m, row, col);
+
+	//printing solution
+
+	matrix_solution_output(m, row, col);
 
 	return 0;
 }
 
 void gauss_method(FTYPE** m, int row, int col)
 {
-	int rows_done = 0; //Number of rows that don't need any procedures anymore(?)
+	int rows_done_first = 0; //Number of rows that don't need any procedures anymore(?)
 
 	for (int j = 0; j < col; j++) //col = m
 	{
-		for (int i = rows_done; i < row; i++) //row = n
+		for (int i = rows_done_first; i < row; i++) //row = n
 		{
 			if (m[i][j] != 0)
 			{
 				row_division(m[i], m[i][j], col);
-				cout << "after row division\n";
-				matrix_print(m, row, col);
-				cout << "\n";
 
 				for (int k = i + 1; k < row; k++)
 				{
@@ -82,8 +84,34 @@ void gauss_method(FTYPE** m, int row, int col)
 					}
 				}
 
-				row_swap(m[i], m[rows_done]);
-				rows_done += 1;
+				row_swap(m[i], m[rows_done_first]);
+				rows_done_first += 1;
+				break;
+			}
+		}
+	}
+
+	//Reverse part
+
+	int rows_done_second = 0;
+
+	for (int j = col - 2; j >= 0; j--)
+	{
+		for (int i = row - 1 - rows_done_second; i >= 0; i--)
+		{
+			if (m[i][j] == 0)
+			{
+				rows_done_second++;
+			}
+			else
+			{
+				for (int k = i - 1; k >= 0; k--)
+				{
+					if (m[k][j] != 0)
+					{
+						row_row1_plus_row2mult_by_scalar(m[k], m[i], -m[k][j], col);
+					}
+				}
 				break;
 			}
 		}
@@ -161,5 +189,96 @@ void row_substraction_row2_row1(FTYPE*& row1, FTYPE*& row2, int col)
 	for (int i = 0; i < col; i++)
 	{
 		row2[i] = row2[i] - row1[i];
+	}
+}
+
+void no_minus_zeros(FTYPE** m, int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			if (abs(m[i][j]) < 0.0000001)
+			{
+				m[i][j] = 0.0;
+			}
+		}
+	}
+}
+
+void matrix_solution_output(FTYPE** m, int row, int col)
+{
+	bool matrix_solvable = 1;
+
+	for (int i = 0; i < row; i++)
+	{
+		bool row_solvable = 0;
+
+		for (int j = 0; j < col - 1; j++)
+		{
+			if (m[i][j] != 0)
+			{
+				row_solvable = 1;
+				break;
+			}
+		}
+
+		if (row_solvable == 0 && m[i][col - 1] != 0)
+		{
+		matrix_solvable = 0;
+		break;
+		}
+	}
+
+	if (matrix_solvable == 1)
+	{
+		for (int i = 0; i < row; i++)
+		{
+			FTYPE x_scalar;
+
+			for (int j = 0; j < col - 1; j++)
+			{
+				if (m[i][j] != 0)
+				{
+					cout << "\nx" << j + 1 << " = " << m[i][col - 1] / m[i][j];
+					x_scalar = m[i][j];
+
+					for (int k = 0; k < col - 1; k++)
+					{
+						if (m[i][k] != 0 && m[i][k] > 0 && m[i][k] != m[i][j])
+						{
+							cout << " - " << m[i][k] / x_scalar << " * x" << k + 1;
+						}
+						else if (m[i][k] != 0 && m[i][k] < 0 && m[i][k] != m[i][j])
+						{
+							cout << " + " << m[i][k] / x_scalar << " * x" << k + 1;
+						}
+					}
+				}
+			}
+		}
+
+		for (int j = 0; j < col; j++)
+		{
+			bool any_number = 1;
+			
+			for (int i = 0; i < row; i++)
+			{
+				if (m[i][j] != 0)
+				{
+					any_number = 0;
+					break;
+				}
+			}
+
+			if (any_number == 1)
+			{
+				cout << "\nx" << j + 1 << " = any number\n";
+			}
+		}
+	}
+	else
+	{
+		cout << "No solutions.\n";
 	}
 }
