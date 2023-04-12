@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cmath>
 
+//#include "Polynomial.h"
+
 #define FTYPE double
 
 using namespace std;
@@ -15,6 +17,7 @@ FTYPE* row_multiplication_return(FTYPE* row, FTYPE scalar, int row_length);
 void row_row1_plus_row2mult_by_scalar(FTYPE*& row1, FTYPE* row2, FTYPE scalar, int row_length);
 void no_minus_zeros(FTYPE** m, int row, int col);
 void matrix_solution_output(FTYPE** m, int row, int col);
+void matrix_zero_cleaner(FTYPE**& m, int& row, int col);
 
 int main()
 {
@@ -48,7 +51,7 @@ int main()
 	matrix_input(m, copy_m, row, col);
 	cout << "\n";
 
-	//doing whatever
+	//Gaussian elimination
 
 	gauss_method(m, row, col);
 
@@ -57,11 +60,9 @@ int main()
 	no_minus_zeros(m, row, col);
 	matrix_print(m, row, col);
 
-	//printing solution
+	//Memory allocation
 
-	matrix_solution_output(m, row, col);
 
-	return 0;
 }
 
 void gauss_method(FTYPE** m, int row, int col)
@@ -91,8 +92,8 @@ void gauss_method(FTYPE** m, int row, int col)
 		}
 	}
 
-	//Reverse part
-
+	//Reverse part 
+	/*
 	int rows_done_second = 0;
 
 	for (int j = col - 2; j >= 0; j--)
@@ -114,6 +115,47 @@ void gauss_method(FTYPE** m, int row, int col)
 				}
 				break;
 			}
+		}
+	}*/
+}
+
+void matrix_zero_cleaner(FTYPE**& m, int& row, int col)
+{
+	int all_zeros = 1;
+	for (int i = 0; i < row; i++)
+	{
+		all_zeros = 1;
+		for (int j = 0; j < col; j++)
+		{
+			if (m[i][j] != 0)
+			{
+				all_zeros = 0;
+				break;
+			}
+		}
+
+		if (all_zeros == 1)
+		{
+			int all_zeros_changable_row = 1;
+
+			for (int j = row - 1; j > -1; j--)
+			{
+				for (int f = 0; f < col; f++)
+				{
+					if (m[j][f] != 0)
+					{
+						all_zeros_changable_row = 0;
+						break;
+					}
+				}
+				if (all_zeros_changable_row == 1)
+				{
+					row_swap(m[i], m[j]);
+					break;
+				}
+			}
+
+			row -= 1;
 		}
 	}
 }
@@ -225,8 +267,8 @@ void matrix_solution_output(FTYPE** m, int row, int col)
 
 		if (row_solvable == 0 && m[i][col - 1] != 0)
 		{
-		matrix_solvable = 0;
-		break;
+			matrix_solvable = 0;
+			break;
 		}
 	}
 
@@ -261,7 +303,7 @@ void matrix_solution_output(FTYPE** m, int row, int col)
 		for (int j = 0; j < col; j++)
 		{
 			bool any_number = 1;
-			
+
 			for (int i = 0; i < row; i++)
 			{
 				if (m[i][j] != 0)
