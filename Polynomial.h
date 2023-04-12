@@ -1,12 +1,19 @@
 #pragma once
+#include <iostream>
+#include <cmath>
+
 class Polynomial
 {
 public:
 
-	int n;
+	int n = 7;
 	double* pol = new double[n]();
 
-	Polynomial Add(const Polynomial& op2);
+	Polynomial operator + (const Polynomial& op2);
 
-	Polynomial Add(const double& a);
+	Polynomial operator * (const double& a);
+
+	void print();
+
+	Polynomial cleaner();
 };
