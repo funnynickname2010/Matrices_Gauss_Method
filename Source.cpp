@@ -61,140 +61,172 @@ int main()
 	no_minus_zeros(m, row, col);
 	matrix_print(m, row, col);
 
-	//Memory allocation
+	//No solutions part
 
-	Polynomial* solutions = new Polynomial[col - 1];
-	/*for (int i = 0; i < col - 1; i++)
+	int matrix_solvable = 1;
+
+	for (int i = row - 1; i > -1; i--)
 	{
-		solutions[i].n = col;
-	}*/
+		int row_zero = 1;
 
-	//Finding solutions
-
-	no_minus_zeros(m, row, col);
-
-	for (int i = 0; i < row; i++)
-	{
-		cout << endl << m[i][col - 1] << endl;
-	}
-	cout << "M[i][-1] done" << endl << endl;
-
-	int last_calculated_x = col - 1;
-	int last_calculated_param = 0;
-	//solutions[0].print();
-	//solutions[1].print();
-	//solutions[0] = ((solutions[1] * (-2)) + solutions[0]);
-	//solutions[0].print();
-	//solutions[1].print();
-
-	for (int i = (row - 1); i > -1; i -= 1)
-	{
-		for (int j = last_calculated_x - 1; j > 0; j -= 1) //Left upper should be dealed with separately
+		for (int j = 0; j < col - 1; j++)
 		{
-			cout << endl << endl << "i: " << i << "   " << "j: " << j << endl;
-
 			if (m[i][j] != 0)
 			{
-				if ((i == row - 1) && (m[i][j - 1] != 0))
-				{
-					//param
-					cout << endl << "case 1" << endl;
-
-					solutions[j].pol[last_calculated_param] = 1;
-					last_calculated_param += 1;
-				}
-				else if ((i == row - 1) && (m[i][j] != 0))
-				{
-					//not a param
-					cout << endl << "case 2" << endl;
-
-					for (int k = j + 1; k < col - 1; k++)
-					{
-						double coef = m[i][k] / m[i][j];
-						cout << '\n' << "m[i][k]: " << m[i][k] << "    " << "m[i][j]: " << m[i][j] << "    "  "coef: " << coef << '\n';
-						cout << "i: " << i << "   " << "j: " << j << endl;
-
-						solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
-
-						cout << "Solutions mid journey: " << endl;
-						solutions[j].print();
-						solutions[k].print();
-						cout << endl;
-						solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
-						solutions[j].print();
-						solutions[k].print();
-					}
-
-					cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
-					cout << m[i][col - 1] << endl;
-					cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
-					solutions[j].pol[solutions[j].n - 1] += (m[i][col - 1] / m[i][j]);
-					cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
-					cout << m[i][col - 1] << endl;
-					cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
-
-					last_calculated_x = j;
-					cout << "Solution - 1 mid journey: " << endl;
-					solutions[j].print();
-					cout << endl;
-					break;
-				}
-				else if (m[i][j - 1] != 0)
-				{
-					//param
-					cout << endl << "case 3" << endl;
-
-					solutions[j].pol[last_calculated_param] = 1;
-					last_calculated_param += 1;
-				}
-				else
-				{
-					//not a param
-					cout << endl << "case 4" << endl;
-
-					for (int k = j + 1; k < col - 1; k++)
-					{
-						double coef = m[i][k] / m[i][j];
-						cout << '\n' << "m[i][k]: " << m[i][k] << "    " << "m[i][j]: " << m[i][j] << "    "  "coef: " << coef << '\n';
-						cout << "i: " << i << "   " << "j: " << j << endl;
-
-						cout << "Solutions mid journey: " << endl;
-						solutions[j].print();
-						solutions[k].print();
-						cout << endl;
-						solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
-						solutions[j].print();
-						solutions[k].print();
-					}
-
-					cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
-					cout << m[i][col - 1] << endl;
-					cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
-					solutions[j].pol[(solutions[j].n) - 1] = ((m[i][col - 1] / m[i][j]) + solutions[j].pol[(solutions[j].n) - 1]);
-					cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
-					cout << m[i][col - 1] << endl;
-					cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
-
-					last_calculated_x = j;
-					break;
-				}
+				row_zero = 0;
+				break;
 			}
+		}
+
+		if (row_zero == 1 && m[i][col - 1] != 0)
+		{
+			matrix_solvable = 0;
 		}
 	}
 
-	for (int k = 1; k < col - 1; k++)
+	if (matrix_solvable == 0)
 	{
-		double coef = m[0][k] / m[0][0];
-
-		solutions[0] = ((solutions[k] * (-coef)) + solutions[0]);
+		cout << "No solutions." << endl;
 	}
-
-	solutions[0].pol[solutions[0].n - 1] += (m[0][col - 1] / m[0][0]);
-
-	for (int i = 0; i < col - 1; i++)
+	else
 	{
-		solutions[i].cleaner();
-		solutions[i].print();
+		//Memory allocation
+
+		Polynomial* solutions = new Polynomial[col - 1];
+		/*for (int i = 0; i < col - 1; i++)
+		{
+			solutions[i].n = col;
+		}*/
+
+		//Finding solutions
+
+		no_minus_zeros(m, row, col);
+
+		for (int i = 0; i < row; i++)
+		{
+			cout << endl << m[i][col - 1] << endl;
+		}
+		cout << "M[i][-1] done" << endl << endl;
+
+		int last_calculated_x = col - 1;
+		int last_calculated_param = 0;
+		//solutions[0].print();
+		//solutions[1].print();
+		//solutions[0] = ((solutions[1] * (-2)) + solutions[0]);
+		//solutions[0].print();
+		//solutions[1].print();
+
+		for (int i = (row - 1); i > -1; i -= 1)
+		{
+			for (int j = last_calculated_x - 1; j > 0; j -= 1) //Left upper should be dealed with separately
+			{
+				cout << endl << endl << "i: " << i << "   " << "j: " << j << endl;
+
+				if (m[i][j] != 0)
+				{
+					if ((i == row - 1) && (m[i][j - 1] != 0))
+					{
+						//param
+						cout << endl << "case 1" << endl;
+
+						solutions[j].pol[last_calculated_param] = 1;
+						last_calculated_param += 1;
+					}
+					else if ((i == row - 1) && (m[i][j] != 0))
+					{
+						//not a param
+						cout << endl << "case 2" << endl;
+
+						for (int k = j + 1; k < col - 1; k++)
+						{
+							double coef = m[i][k] / m[i][j];
+							cout << '\n' << "m[i][k]: " << m[i][k] << "    " << "m[i][j]: " << m[i][j] << "    "  "coef: " << coef << '\n';
+							cout << "i: " << i << "   " << "j: " << j << endl;
+
+							solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
+
+							cout << "Solutions mid journey: " << endl;
+							solutions[j].print();
+							solutions[k].print();
+							cout << endl;
+							solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
+							solutions[j].print();
+							//solutions[j].cleaner();
+							solutions[j].print();
+						}
+
+						cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
+						cout << m[i][col - 1] << endl;
+						cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
+						solutions[j].pol[solutions[j].n - 1] += (m[i][col - 1] / m[i][j]);
+						cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
+						cout << m[i][col - 1] << endl;
+						cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
+
+						last_calculated_x = j;
+						cout << "Solution - 1 mid journey: " << endl;
+						solutions[j].print();
+						cout << endl;
+						break;
+					}
+					else if (m[i][j - 1] != 0)
+					{
+						//param
+						cout << endl << "case 3" << endl;
+
+						solutions[j].pol[last_calculated_param] = 1;
+						last_calculated_param += 1;
+					}
+					else
+					{
+						//not a param
+						cout << endl << "case 4" << endl;
+
+						for (int k = j + 1; k < col - 1; k++)
+						{
+							double coef = m[i][k] / m[i][j];
+							cout << '\n' << "m[i][k]: " << m[i][k] << "    " << "m[i][j]: " << m[i][j] << "    "  "coef: " << coef << '\n';
+							cout << "i: " << i << "   " << "j: " << j << endl;
+
+							cout << "Solutions mid journey: " << endl;
+							solutions[j].print();
+							solutions[k].print();
+							cout << endl;
+							solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
+							solutions[j].print();
+							solutions[k].print();
+						}
+
+						cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
+						cout << m[i][col - 1] << endl;
+						cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
+						solutions[j].pol[(solutions[j].n) - 1] = ((m[i][col - 1] / m[i][j]) + solutions[j].pol[(solutions[j].n) - 1]);
+						cout << endl << solutions[j].pol[solutions[j].n - 1] << endl;
+						cout << m[i][col - 1] << endl;
+						cout << m[i][col - 1] / m[i][j] << endl << endl << endl;
+
+						last_calculated_x = j;
+						break;
+					}
+				}
+			}
+		}
+
+		for (int k = 1; k < col - 1; k++)
+		{
+			double coef = m[0][k] / m[0][0];
+
+			solutions[0] = ((solutions[k] * (-coef)) + solutions[0]);
+		}
+
+		solutions[0].pol[solutions[0].n - 1] += (m[0][col - 1] / m[0][0]);
+
+		for (int i = 0; i < col - 1; i++)
+		{
+			solutions[i] = solutions[i].cleaner();
+			cout << "x[" << i << "] = ";
+			solutions[i].print();
+		}
 	}
 }
 

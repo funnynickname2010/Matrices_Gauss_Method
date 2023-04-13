@@ -35,11 +35,32 @@ void Polynomial::print()
 {
 	for (int i = 0; i < n - 1; i++)
 	{
-		//std::cout << pol[i] << "*t[" << i << "] + ";
-		std::cout << pol[i] << " ";
+		if (pol[i] != 0 && i == 0)
+		{
+			std::cout << pol[i] << "*t[" << i << "] ";
+		}
+		else if (pol[i] != 0)
+		{
+			if (pol[i] > 0)
+			{
+				std::cout << "+ " << pol[i] << "*t[" << i << "] ";
+			}
+			else
+			{
+				std::cout << "- " << abs(pol[i]) << "*t[" << i << "] ";
+			}
+		}
 	}
 
-	std::cout << pol[n - 1];
+	if (pol[n - 1] > 0)
+	{
+		std::cout << "+ " << pol[n - 1];
+	}
+	else if (pol[n - 1] < 0)
+	{
+		std::cout << "- " << abs(pol[n - 1]);
+	}
+
 	std::cout << '\n';
 }
 
@@ -55,7 +76,8 @@ Polynomial Polynomial::cleaner()
 
 	for (int i = 0; i < n; i++)
 	{
-		if (abs(res.pol[i]) < 0.1)
+		//std::cout << "cleaner working";
+		if (res.pol[i] < 0.9 && res.pol[i] > -0.9)
 		{
 			res.pol[i] = 0;
 		}

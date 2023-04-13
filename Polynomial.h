@@ -6,7 +6,7 @@ class Polynomial
 {
 public:
 
-	int n = 7;
+	int n = 20;
 	double* pol = new double[n]();
 
 	Polynomial operator + (const Polynomial& op2);
