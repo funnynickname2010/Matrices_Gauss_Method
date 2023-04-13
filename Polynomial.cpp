@@ -33,14 +33,18 @@ Polynomial Polynomial::operator * (const double& a)
 
 void Polynomial::print()
 {
+	int has_params = 0;
+
 	for (int i = 0; i < n - 1; i++)
 	{
 		if (pol[i] != 0 && i == 0)
 		{
 			std::cout << pol[i] << "*t[" << i << "] ";
+			has_params = 1;
 		}
 		else if (pol[i] != 0)
 		{
+			has_params = 1;
 			if (pol[i] > 0)
 			{
 				std::cout << "+ " << pol[i] << "*t[" << i << "] ";
@@ -52,15 +56,29 @@ void Polynomial::print()
 		}
 	}
 
-	if (pol[n - 1] > 0)
+	if (pol[n - 1] > 0 && has_params == 1)
 	{
 		std::cout << "+ " << pol[n - 1];
 	}
-	else if (pol[n - 1] < 0)
+	else if (pol[n - 1] < 0 && has_params == 1)
 	{
 		std::cout << "- " << abs(pol[n - 1]);
 	}
+	else if (has_params == 0)
+	{
+		std::cout << pol[n - 1];
+	}
 
+	std::cout << '\n';
+}
+
+void Polynomial::print_raw()
+{
+	for (int i = 0; i < n; i++)
+	{
+		std::cout << pol[i] << " ";
+	}
+	
 	std::cout << '\n';
 }
 
@@ -77,7 +95,7 @@ Polynomial Polynomial::cleaner()
 	for (int i = 0; i < n; i++)
 	{
 		//std::cout << "cleaner working";
-		if (res.pol[i] < 0.9 && res.pol[i] > -0.9)
+		if (abs(res.pol[i]) < 0.0000001)
 		{
 			res.pol[i] = 0;
 		}
