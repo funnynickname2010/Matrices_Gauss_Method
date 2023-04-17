@@ -1,9 +1,34 @@
 #include "Polynomial.h"
 #include <cmath>
 
+/*
+Polynomial::Polynomial(int length)
+{
+	pol = new double[length];
+	n = length;
+
+	for (int i = 0; i < length; i++)
+	{
+		pol[i] = 0;
+	}
+}*/
+
+Polynomial::Polynomial()
+{
+	n = 30;
+	pol = new double[n];
+	
+	for (int i = 0; i < n; i++)
+	{
+		pol[i] = 0;
+	}
+}
+
 Polynomial Polynomial::operator + (const Polynomial& op2)
 {
+	//Polynomial res(n);
 	Polynomial res;
+
 	if (n < op2.n) { res.n = n; }
 	else { res.n = op2.n; }
 
@@ -21,7 +46,9 @@ Polynomial Polynomial::operator + (const Polynomial& op2)
 
 Polynomial Polynomial::operator * (const double& a)
 {
+	//Polynomial res(n);
 	Polynomial res;
+	res.n = n;
 
 	for (int i = 0; i < n; i++)
 	{
@@ -84,6 +111,7 @@ void Polynomial::print_raw()
 
 Polynomial Polynomial::cleaner()
 {
+	//Polynomial res(n);
 	Polynomial res;
 	res.n = n;
 
@@ -104,13 +132,3 @@ Polynomial Polynomial::cleaner()
 	return res;
 }
 
-/*Polynomial Polynomial::Add(const double& a)
-{
-	Polynomial res;
-	res.n = n;
-	for (int i = 0; i < n; i++) { res.pol[i] = pol[i]; }
-
-	res.pol[-1] += a;
-
-	return res;
-}*/

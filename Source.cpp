@@ -92,6 +92,7 @@ int main()
 	{
 		//Memory allocation
 
+		//Polynomial example(col);
 		Polynomial* solutions = new Polynomial[col - 1];
 
 		//Finding solutions
@@ -203,7 +204,7 @@ int main()
 			solutions[i] = solutions[i].cleaner();
 			cout << "x[" << i << "] = ";
 			solutions[i].print();
-			solutions[i].print_raw();
+			//solutions[i].print_raw();
 		}
 	}
 }
