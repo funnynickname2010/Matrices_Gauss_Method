@@ -20,6 +20,6 @@ public:
 	Polynomial cleaner();
 
 	//Polynomial(int length);
-	
+
 	Polynomial();
 };

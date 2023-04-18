@@ -2,8 +2,6 @@
 #include <cmath>
 #include "Polynomial.h"
 
-//#include "Polynomial.h"
-
 #define FTYPE double
 
 using namespace std;
@@ -152,7 +150,7 @@ int main()
 							solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
 
 
-							solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);	
+							solutions[j] = ((solutions[k] * (-coef)) + solutions[j]);
 						}
 
 
@@ -204,7 +202,30 @@ int main()
 			solutions[i] = solutions[i].cleaner();
 			cout << "x[" << i << "] = ";
 			solutions[i].print();
+			cout << endl;
 			//solutions[i].print_raw();
+		}
+
+		//cout << endl << "ROW: " << row << endl << "Col - 1: " << (col - 1);// << endl << endl << "Row: " << row;
+
+		for (int i = 0; i < row; i++)
+		{
+			Polynomial row_left;
+
+			for (int j = 0; j < col - 1; j++)
+			{
+				row_left = row_left + (solutions[j] * copy_m[i][j]);
+				//cout << endl << "solutions[j]: ";
+				//solutions[j].print_raw();
+				//cout << endl << "solutions[j] * copy_m[i][j]: ";
+				//(solutions[j] * copy_m[i][j]).print_raw();
+				//cout << endl << "row_left: ";
+				//row_left.print_raw();
+			}
+			
+			cout << endl;
+			row_left.print();
+			cout << " = " << copy_m[i][col - 1];
 		}
 	}
 }
@@ -220,12 +241,14 @@ void gauss_method(FTYPE** m, int row, int col)
 			if (m[i][j] != 0)
 			{
 				row_division(m[i], m[i][j], col);
+				if (m[i][j] != 1) { matrix_print(m, row, col); }
 
 				for (int k = i + 1; k < row; k++)
 				{
 					if (m[k][j] != 0)
 					{
 						row_row1_plus_row2mult_by_scalar(m[k], m[i], -m[k][j], col);
+						matrix_print(m, row, col);
 					}
 				}
 
@@ -311,7 +334,7 @@ void matrix_input(FTYPE** m, FTYPE** copy_m, int row, int col)
 		for (int j = 0; j < col; j++)
 		{
 			cin >> m[i][j];
-			**copy_m = m[i][j];
+			copy_m[i][j] = m[i][j];
 		}
 	}
 }

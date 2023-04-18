@@ -15,9 +15,9 @@ Polynomial::Polynomial(int length)
 
 Polynomial::Polynomial()
 {
-	n = 30;
+	n = 7;
 	pol = new double[n];
-	
+
 	for (int i = 0; i < n; i++)
 	{
 		pol[i] = 0;
@@ -96,7 +96,7 @@ void Polynomial::print()
 		std::cout << pol[n - 1];
 	}
 
-	std::cout << '\n';
+	//std::cout << '\n';
 }
 
 void Polynomial::print_raw()
@@ -105,7 +105,7 @@ void Polynomial::print_raw()
 	{
 		std::cout << pol[i] << " ";
 	}
-	
+
 	std::cout << '\n';
 }
 
@@ -131,4 +131,3 @@ Polynomial Polynomial::cleaner()
 
 	return res;
 }
-
